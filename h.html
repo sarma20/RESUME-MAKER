@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Builder</title>
+  <!-- Include html2pdf.js library via CDN for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="Untitled.css">
+</head>
+<body>
+  <h1>Resume Builder</h1>
+  <div id="builder">
+    <div class="input-section">
+      <label>Name: <input type="text" id="nameInput" placeholder="Your Name"></label>
+      <label>Email: <input type="email" id="emailInput" placeholder="Your Email"></label>
+      <label>Location: <input type="text" id="locationInput" placeholder="Your Location"></label>
+      <label>Profile Photo: <input type="file" id="photoInput" accept="image/*"></label>
+      <!-- Image preview before upload -->
+      <img id="photoPreview" alt="Profile Photo Preview" style="display:none; max-width:100px; margin-top:10px;">
+      <label>Experience:</label>
+      <textarea id="experienceInput" placeholder="Your Experience" rows="4"></textarea>
+      <label>Skills:</label>
+      <div id="skills-container">
+        <input type="text" id="skillInput" placeholder="Skill">
+      </div>
+      <button type="button" onclick="addSkill()">+ Add Skill</button>
+      <label>Education:</label>
+      <div id="education-container">
+        <input type="text" id="educationInput" placeholder="Education">
+      </div>
+      <button type="button" onclick="addEducation()">+ Add Education</button>
+    </div>
+    <button class="btn" onclick="generatePreview()">Preview Resume</button>
+    <button class="btn" onclick="downloadPDF()">Download PDF</button>
+  </div>
+
+  <!-- Hidden preview section that will be populated -->
+  <div id="preview" style="display:none;">
+    <h1 id="previewName"></h1>
+    <img id="previewPhoto" alt="Profile Photo">
+    <div class="info">
+      <span id="previewEmail"></span><br>
+      <span id="previewLocation"></span>
+    </div>
+    <h2>Experience</h2>
+    <p id="previewExperience"></p>
+    <h2>Skills</h2>
+    <ul id="previewSkills"></ul>
+    <h2>Education</h2>
+    <ul id="previewEducation"></ul>
+  </div>
+
+  <script>
+    // Show image preview when a file is selected
+    document.getElementById('photoInput').addEventListener('change', function(event) {
+      const output = document.getElementById('photoPreview');
+      const file = event.target.files[0];
+      if (file) {
+        output.src = URL.createObjectURL(file);            // preview in form
+        output.style.display = 'block';
+        document.getElementById('previewPhoto').src = output.src;  // set for resume preview
+      }
+    });
+
+    // Add a new Skill input field dynamically
+    function addSkill() {
+      const container = document.getElementById('skills-container');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Skill';
+      container.appendChild(input);
+    }
+
+    // Add a new Education input field dynamically
+    function addEducation() {
+      const container = document.getElementById('education-container');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Education';
+      container.appendChild(input);
+    }
+
+    // Populate the preview section with form values
+    function generatePreview() {
+      // Copy name, email, location
+      document.getElementById('previewName').innerText = document.getElementById('nameInput').value;
+      document.getElementById('previewEmail').innerText = document.getElementById('emailInput').value;
+      document.getElementById('previewLocation').innerText = document.getElementById('locationInput').value;
+      // Copy experience text
+      document.getElementById('previewExperience').innerText = document.getElementById('experienceInput').value;
+      // Build skills list
+      const skillsList = document.getElementById('previewSkills');
+      skillsList.innerHTML = '';
+      document.querySelectorAll('#skills-container input').forEach(function(input) {
+        const value = input.value;
+        if (value.trim() !== '') {
+          const li = document.createElement('li');
+          li.innerText = value;
+          skillsList.appendChild(li);
+        }
+      });
+      // Build education list
+      const eduList = document.getElementById('previewEducation');
+      eduList.innerHTML = '';
+      document.querySelectorAll('#education-container input').forEach(function(input) {
+        const value = input.value;
+        if (value.trim() !== '') {
+          const li = document.createElement('li');
+          li.innerText = value;
+          eduList.appendChild(li);
+        }
+      });
+      // If a photo was uploaded, ensure it's in preview (already set in change handler)
+      const photoSrc = document.getElementById('photoPreview').src;
+      if (photoSrc) {
+        document.getElementById('previewPhoto').src = photoSrc;
+      }
+      // Show the preview section
+      document.getElementById('preview').style.display = 'block';
+    }
+
+    // Use html2pdf.js to download the preview as PDF
+    function downloadPDF() {
+      const element = document.getElementById('preview');
+      html2pdf().from(element).save();  // generates PDF from the preview div
+    }
+  </script>
+</body>
+</html>

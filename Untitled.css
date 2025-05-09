@@ -1,0 +1,13 @@
+
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  .input-section { margin-bottom: 20px; }
+  .input-section label { display: block; margin-top: 10px; }
+  .input-section input, .input-section textarea { width: 100%; padding: 8px; margin-top: 5px; }
+  .btn { margin-top: 10px; padding: 8px 12px; }
+  #skills-container input, #education-container input { margin-bottom: 5px; }
+  #preview { border: 1px solid #333; padding: 20px; margin-top: 20px; }
+  #preview h1 { margin-bottom: 5px; }
+  #preview img { float: right; max-width: 120px; margin-left: 10px; }
+  #preview h2 { margin-top: 20px; margin-bottom: 5px; }
+  #preview ul { margin-top: 5px; }
+  #preview .info { margin-top: 5px; }
